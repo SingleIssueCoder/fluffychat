@@ -15,6 +15,7 @@ import 'message_reactions.dart';
 import 'reply_content.dart';
 import 'state_message.dart';
 import 'verification_request_content.dart';
+import 'package:any_link_preview/any_link_preview.dart';
 
 class Message extends StatelessWidget {
   final Event event;
@@ -110,6 +111,19 @@ class Message extends StatelessWidget {
       MessageTypes.File,
       MessageTypes.Audio,
     }.contains(event.messageType);
+
+    //From https://stackoverflow.com/a/59445736
+    final List<String> containedURLs = 
+      event.messageType != MessageTypes.Text
+      ?
+        []
+      :
+        RegExp(r"((https?:www\.)|(https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?")
+        .allMatches(event.body)
+        .map(
+          (urlMatch) => event.body.substring(urlMatch.start, urlMatch.end)
+        )
+        .toList();
 
     if (ownMessage) {
       color = displayEvent.status.isError
@@ -288,6 +302,9 @@ class Message extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+              Material(
+                  child:containedURLs.isNotEmpty?AnyLinkPreview(link:containedURLs.first):null
               ),
             ],
           ),
