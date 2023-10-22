@@ -109,7 +109,6 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
-      - name: Install dependencies
       - run: flutter pub get
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows --release
