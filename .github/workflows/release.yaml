@@ -128,13 +128,13 @@ jobs:
         with:
           type: 'zip'
           filename: fluffychat-windows-x64.zip
-          directory: build/windows/x64/release/bundle/
+          directory: build/windows/runner/Release/
       - name: Windows Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
-          files: build/windows/x64/release/bundle/fluffychat-windows-x64.zip
+          files: build/windows/runner/Release/fluffychat-windows-x64.zip
 
   # deploy_playstore:
   #   runs-on: ubuntu-latest
