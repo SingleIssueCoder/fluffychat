@@ -15,6 +15,8 @@ import 'message_reactions.dart';
 import 'reply_content.dart';
 import 'state_message.dart';
 import 'verification_request_content.dart';
+import 'package:any_link_preview/any_link_preview.dart';
+import 'package:link_preview_generator/link_preview_generator.dart';
 
 class Message extends StatelessWidget {
   final Event event;
@@ -111,6 +113,28 @@ class Message extends StatelessWidget {
       MessageTypes.Audio,
     }.contains(event.messageType);
 
+    //From https://stackoverflow.com/a/59445736
+    final List<String> containedURLs = 
+      event.messageType != MessageTypes.Text
+      ?
+        []
+      :
+        RegExp(r"((https?:www\.)|(https?:\/\/)|(www\.))[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}(\/[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)?")
+        .allMatches(event.body)
+        .map(
+          (urlMatch) => event.body.substring(urlMatch.start, urlMatch.end)
+        )
+        .toList();
+    const Set<String> difficultURLs = {
+      "https://twitter.com",
+      "https://vxtwitter.com",
+      "https://amazon.com",
+      "https://www.amazon.com",
+      "https://amazon.co.jp",
+      "https://www.amazon.co.jp",
+      "https://reddit.com",
+      "https://www.reddit.com",
+    };
     if (ownMessage) {
       color = displayEvent.status.isError
           ? Colors.redAccent
@@ -289,7 +313,34 @@ class Message extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
+            ]+(containedURLs.isNotEmpty?
+                [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 4.0,
+                      ),
+                    ),
+                  Material(
+                    child:(
+                      //AnyLinkPreview fails on certain major providers,
+                      //but has better error handling than LinkPreviewGenerator.
+                      difficultURLs.any((str)=>containedURLs.first.startsWith(str))?
+                        LinkPreviewGenerator(
+                          link:containedURLs.first,
+                          backgroundColor: color,
+                          titleStyle: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                          bodyStyle: TextStyle(color: textColor),
+                        ):
+                        AnyLinkPreview(
+                          link:containedURLs.first,
+                          backgroundColor: color,
+                          titleStyle: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                          bodyStyle: TextStyle(color: textColor),
+                        )
+                      ),
+                    ),
+                ]:[]
+              ),
           ),
         ),
       ],

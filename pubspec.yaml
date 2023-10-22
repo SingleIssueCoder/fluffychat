@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   adaptive_dialog: ^1.9.0-x-macos-beta.1
+  any_link_preview: any
   animations: ^2.0.7
   archive: ^3.3.9
   badges: ^3.1.1
@@ -60,6 +61,7 @@ dependencies:
   just_audio: ^0.9.30
   keyboard_shortcuts: ^0.1.4
   latlong2: ^0.8.1
+  link_preview_generator: any
   linkify: ^5.0.0
   matrix: ^0.22.3
   matrix_homeserver_recommendations: ^0.3.0
