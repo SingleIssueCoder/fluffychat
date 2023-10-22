@@ -93,7 +93,7 @@ jobs:
       - name: Upload to release
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: fluffychat-linux-x64.tar.gz
@@ -112,18 +112,29 @@ jobs:
       - run: flutter pub get
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows --release
-      - name: Create archive
-        run: zip fluffychat-windows-x64.zip -C build/windows/x64/release/bundle/*
-      - name: Upload to release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+      # - name: Create archive
+      #   run: tar.exe fluffychat-windows-x64.zip -cf build/windows/x64/release/bundle/*
+      # - name: Upload to release
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+      #   with:
+      #     upload_url: ${{ github.event.release.upload_url }}
+      #     asset_path: fluffychat-windows-x64.zip
+      #     asset_name: fluffychat-windows-x64.zip
+      #     asset_content_type: application/gzip
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: fluffychat-windows-x64.zip
-          asset_name: fluffychat-windows-x64.zip
-          asset_content_type: application/gzip
-
+          type: 'zip'
+          filename: fluffychat-windows-x64.zip
+          directory: build/windows/x64/release/bundle/
+      - name: Windows Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        with:
+          files: build/windows/x64/release/bundle/fluffychat-windows-x64.zip
 
   # deploy_playstore:
   #   runs-on: ubuntu-latest
