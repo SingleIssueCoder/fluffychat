@@ -9,7 +9,7 @@ concurrency:
   group: release_workflow
   cancel-in-progress: true
 
-# jobs:
+jobs:
 #   build_web:
 #     runs-on: ubuntu-latest
 #     steps:
