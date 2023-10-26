@@ -60,7 +60,7 @@ extension LocalNotificationsExtension on MatrixState {
           method: ThumbnailMethod.crop,
         );
     if (kIsWeb) {
-      _audioPlayer.play();
+      if(AppConfig.playMessageNotificationSound) _audioPlayer.play();
       html.Notification(
         title,
         body: body,
@@ -101,9 +101,9 @@ extension LocalNotificationsExtension on MatrixState {
             L10n.of(context)!.markAsRead,
           ),
         ],
-        hints: [
+        hints: AppConfig.playMessageNotificationSound?[
           NotificationHint.soundName('message-new-instant'),
-        ],
+        ]:[],
       );
       notification.action.then((actionStr) {
         final action = DesktopNotificationActions.values

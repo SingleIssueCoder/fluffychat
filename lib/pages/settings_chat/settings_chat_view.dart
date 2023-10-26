@@ -63,6 +63,12 @@ class SettingsChatView extends StatelessWidget {
                   storeKey: SettingKeys.autoplayImages,
                   defaultValue: AppConfig.autoplayImages,
                 ),
+              SettingsSwitchListTile.adaptive(
+                storeKey: SettingKeys.playMessageNotificationSound, 
+                title: "Play message arrived sound",
+                onChanged: (b) => AppConfig.playMessageNotificationSound = b,
+                defaultValue: AppConfig.playMessageNotificationSound,
+              ),
               const Divider(),
               SettingsSwitchListTile.adaptive(
                 title: L10n.of(context)!.sendTypingNotifications,
