@@ -61,10 +61,10 @@ class ChatList extends StatefulWidget {
   final String? activeChat;
 
   const ChatList({
-    Key? key,
+    super.key,
     this.displayNavigationRail = false,
     required this.activeChat,
-  }) : super(key: key);
+  });
 
   @override
   ChatListController createState() => ChatListController();
@@ -471,6 +471,7 @@ class ChatListController extends State<ChatList>
           title: L10n.of(context)!.areYouSure,
           okLabel: L10n.of(context)!.yes,
           cancelLabel: L10n.of(context)!.cancel,
+          message: L10n.of(context)!.archiveRoomDescription,
         ) ==
         OkCancelResult.ok;
     if (!confirmed) return;

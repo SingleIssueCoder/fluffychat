@@ -15,8 +15,8 @@ import 'events/audio_player.dart';
 class RecordingDialog extends StatefulWidget {
   static const String recordingFileType = 'm4a';
   const RecordingDialog({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   RecordingDialogState createState() => RecordingDialogState();
@@ -28,16 +28,15 @@ class RecordingDialogState extends State<RecordingDialog> {
 
   bool error = false;
   String? _recordedPath;
-  final _audioRecorder = Record();
+  final _audioRecorder = AudioRecorder();
   final List<double> amplitudeTimeline = [];
 
-  static const int bitRate = 64000;
-  static const int samplingRate = 22050;
+  static const int bitRate = 16000;
 
   Future<void> startRecording() async {
     try {
       final tempDir = await getTemporaryDirectory();
-      _recordedPath =
+      final path = _recordedPath =
           '${tempDir.path}/recording${DateTime.now().microsecondsSinceEpoch}.${RecordingDialog.recordingFileType}';
 
       final result = await _audioRecorder.hasPermission();
@@ -55,10 +54,14 @@ class RecordingDialogState extends State<RecordingDialog> {
               : AudioEncoder.aacLc;
 
       await _audioRecorder.start(
-        encoder: audioCodec,
-        path: _recordedPath,
-        bitRate: bitRate,
-        samplingRate: samplingRate,
+        RecordConfig(
+          encoder: audioCodec,
+          autoGain: true,
+          noiseSuppress: true,
+          echoCancel: true,
+          bitRate: bitRate,
+        ),
+        path: path,
       );
       setState(() => _duration = Duration.zero);
       _recorderSubscription?.cancel();

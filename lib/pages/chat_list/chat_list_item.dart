@@ -30,8 +30,8 @@ class ChatListItem extends StatelessWidget {
     this.selected = false,
     this.onTap,
     this.onLongPress,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   void clickAction(BuildContext context) async {
     if (onTap != null) return onTap!();
@@ -132,6 +132,7 @@ class ChatListItem extends StatelessWidget {
         title: L10n.of(context)!.areYouSure,
         okLabel: L10n.of(context)!.yes,
         cancelLabel: L10n.of(context)!.no,
+        message: L10n.of(context)!.archiveRoomDescription,
       );
       if (confirmed == OkCancelResult.cancel) return;
       await showFutureLoadingDialog(

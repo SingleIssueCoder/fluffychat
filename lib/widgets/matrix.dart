@@ -45,8 +45,8 @@ class Matrix extends StatefulWidget {
     this.child,
     required this.clients,
     this.queryParameters,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   MatrixState createState() => MatrixState();
@@ -376,14 +376,19 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
           final result = await showOkCancelAlertDialog(
             barrierDismissible: true,
             context: context,
-            title: L10n.of(context)!.oopsSomethingWentWrong,
+            title: L10n.of(context)!.pushNotificationsNotAvailable,
             message: errorMsg,
-            okLabel:
-                link == null ? L10n.of(context)!.ok : L10n.of(context)!.help,
+            fullyCapitalizedForMaterial: false,
+            okLabel: link == null
+                ? L10n.of(context)!.ok
+                : L10n.of(context)!.learnMore,
             cancelLabel: L10n.of(context)!.doNotShowAgain,
           );
           if (result == OkCancelResult.ok && link != null) {
-            launchUrlString(link.toString());
+            launchUrlString(
+              link.toString(),
+              mode: LaunchMode.externalApplication,
+            );
           }
           if (result == OkCancelResult.cancel) {
             await store.setItemBool(SettingKeys.showNoGoogle, true);
@@ -437,12 +442,6 @@ class MatrixState extends State<Matrix> with WidgetsBindingObserver {
     store
         .getItemBool(SettingKeys.hideUnknownEvents, AppConfig.hideUnknownEvents)
         .then((value) => AppConfig.hideUnknownEvents = value);
-    store
-        .getItemBool(
-          SettingKeys.showDirectChatsInSpaces,
-          AppConfig.showDirectChatsInSpaces,
-        )
-        .then((value) => AppConfig.showDirectChatsInSpaces = value);
     store
         .getItemBool(SettingKeys.separateChatTypes, AppConfig.separateChatTypes)
         .then((value) => AppConfig.separateChatTypes = value);

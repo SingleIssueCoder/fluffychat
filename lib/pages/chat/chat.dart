@@ -43,9 +43,9 @@ class ChatPage extends StatelessWidget {
   final String roomId;
 
   const ChatPage({
-    Key? key,
+    super.key,
     required this.roomId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +95,9 @@ class ChatPageWithRoom extends StatefulWidget {
   final Room room;
 
   const ChatPageWithRoom({
-    Key? key,
+    super.key,
     required this.room,
-  }) : super(key: key);
+  });
 
   @override
   ChatController createState() => ChatController();
@@ -485,7 +485,7 @@ class ChatController extends State<ChatPageWithRoom> {
   void sendFileAction() async {
     final result = await AppLock.of(context).pauseWhile(
       FilePicker.platform.pickFiles(
-        allowMultiple: true,
+        allowMultiple: false,
         withData: true,
       ),
     );
@@ -524,12 +524,11 @@ class ChatController extends State<ChatPageWithRoom> {
   }
 
   void sendImageAction() async {
-    //AppLock.of(context).pauseWhile();
     final result = await AppLock.of(context).pauseWhile(
       FilePicker.platform.pickFiles(
         type: FileType.image,
         withData: true,
-        allowMultiple: true,
+        allowMultiple: false,
       ),
     );
     if (result == null || result.files.isEmpty) return;
@@ -575,7 +574,10 @@ class ChatController extends State<ChatPageWithRoom> {
   void openVideoCameraAction() async {
     // Make sure the textfield is unfocused before opening the camera
     FocusScope.of(context).requestFocus(FocusNode());
-    final file = await ImagePicker().pickVideo(source: ImageSource.camera);
+    final file = await ImagePicker().pickVideo(
+      source: ImageSource.camera,
+      maxDuration: const Duration(minutes: 1),
+    );
     if (file == null) return;
     final bytes = await file.readAsBytes();
     await showDialog(
@@ -626,7 +628,7 @@ class ChatController extends State<ChatPageWithRoom> {
       }
     }
 
-    if (await Record().hasPermission() == false) return;
+    if (await AudioRecorder().hasPermission() == false) return;
     final result = await showDialog<RecordingResult>(
       context: context,
       useRootNavigator: false,

@@ -43,8 +43,8 @@ class Message extends StatelessWidget {
     required this.onSwipe,
     this.selected = false,
     required this.timeline,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// Indicates wheither the user may use a mouse instead
   /// of touchscreen.
@@ -72,7 +72,7 @@ class Message extends StatelessWidget {
     final client = Matrix.of(context).client;
     final ownMessage = event.senderId == client.userID;
     final alignment = ownMessage ? Alignment.topRight : Alignment.topLeft;
-    var color = Theme.of(context).colorScheme.surfaceVariant;
+    var color = Theme.of(context).colorScheme.onInverseSurface;
     final displayTime = event.type == EventTypes.RoomCreate ||
         nextEvent == null ||
         !event.originServerTs.sameEnvironment(nextEvent!.originServerTs);
@@ -86,7 +86,7 @@ class Message extends StatelessWidget {
         nextEvent!.senderId == event.senderId &&
         !displayTime;
     final textColor = ownMessage
-        ? Theme.of(context).colorScheme.onPrimary
+        ? Theme.of(context).colorScheme.onPrimaryContainer
         : Theme.of(context).colorScheme.onBackground;
     final rowMainAxisAlignment =
         ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
@@ -138,7 +138,7 @@ class Message extends StatelessWidget {
     if (ownMessage) {
       color = displayEvent.status.isError
           ? Colors.redAccent
-          : Theme.of(context).colorScheme.primary;
+          : Theme.of(context).colorScheme.primaryContainer;
     }
 
     final row = Row(
