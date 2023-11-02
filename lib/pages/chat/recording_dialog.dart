@@ -28,15 +28,16 @@ class RecordingDialogState extends State<RecordingDialog> {
 
   bool error = false;
   String? _recordedPath;
-  final _audioRecorder = AudioRecorder();
+  final _audioRecorder = Record();
   final List<double> amplitudeTimeline = [];
 
-  static const int bitRate = 16000;
+  static const int bitRate = 64000;
+  static const int samplingRate = 22050;
 
   Future<void> startRecording() async {
     try {
       final tempDir = await getTemporaryDirectory();
-      final path = _recordedPath =
+      _recordedPath =
           '${tempDir.path}/recording${DateTime.now().microsecondsSinceEpoch}.${RecordingDialog.recordingFileType}';
 
       final result = await _audioRecorder.hasPermission();
@@ -45,23 +46,10 @@ class RecordingDialogState extends State<RecordingDialog> {
         return;
       }
       await WakelockPlus.enable();
-
-      // We try to pick Opus where supported, since that is a codec optimized
-      // for speech as well as what the voice messages MSC uses.
-      final audioCodec =
-          (await _audioRecorder.isEncoderSupported(AudioEncoder.opus))
-              ? AudioEncoder.opus
-              : AudioEncoder.aacLc;
-
       await _audioRecorder.start(
-        RecordConfig(
-          encoder: audioCodec,
-          autoGain: true,
-          noiseSuppress: true,
-          echoCancel: true,
-          bitRate: bitRate,
-        ),
-        path: path,
+        path: _recordedPath,
+        bitRate: bitRate,
+        samplingRate: samplingRate,
       );
       setState(() => _duration = Duration.zero);
       _recorderSubscription?.cancel();
