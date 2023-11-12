@@ -443,7 +443,7 @@ class InputBar extends StatelessWidget {
                     }
                     return null;
                   },
-                ),
+               ),
               },
         child: TypeAheadField<Map<String, String?>>(
           direction: AxisDirection.up,

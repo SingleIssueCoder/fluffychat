@@ -328,9 +328,7 @@ class Message extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ]+(containedURLs.isNotEmpty?
+                ]+(containedURLs.isNotEmpty?
                 [
                   const Padding(
                     padding: EdgeInsets.symmetric(
@@ -364,8 +362,10 @@ class Message extends StatelessWidget {
                   ),
                 ]:[]
               ),
+            ),
           ),
-        ),
+        ],
+       ),
       ),
     );
     Widget container;
