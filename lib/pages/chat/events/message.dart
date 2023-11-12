@@ -305,48 +305,47 @@ class Message extends StatelessWidget {
                               ],
                             ),
                           ),
+                        if(containedURLs.isNotEmpty)...[
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 4.0,
+                              ),
+                            ),
+                          Material(
+                            child:
+                              (
+                                youtubeURLs.any((str)=>containedURLs.firstOrNull?.startsWith(str)??false)?
+                                
+                                YoutubePlayer(controller: YoutubePlayerController(initialVideoId: YoutubePlayer.convertUrlToId(containedURLs.first)??""))
+                                :(
+                                  //AnyLinkPreview fails on certain major providers,
+                                  //but has better error handling than LinkPreviewGenerator.
+                                  difficultURLs.any((str)=>containedURLs.firstOrNull?.startsWith(str)??false)?
+                                  LinkPreviewGenerator(
+                                    link:containedURLs.first,
+                                    backgroundColor: color,
+                                    titleStyle: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                                    bodyStyle: TextStyle(color: textColor),
+                                  ):
+                                  AnyLinkPreview(
+                                    link:containedURLs.firstOrNull??"",
+                                    backgroundColor: color,
+                                    titleStyle: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                                    bodyStyle: TextStyle(color: textColor),
+                                  )
+                                )
+                            ),
+                          ),
+                        ]
                       ],
                     ),
-                  ),
-                ]+(containedURLs.isNotEmpty?
-                [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 4.0,
-                      ),
-                    ),
-                  Material(
-                    child:
-                      (
-                        youtubeURLs.any((str)=>containedURLs.first.startsWith(str))?
-                        
-                        YoutubePlayer(controller: YoutubePlayerController(initialVideoId: YoutubePlayer.convertUrlToId(containedURLs.first)??""))
-                        :(
-                          //AnyLinkPreview fails on certain major providers,
-                          //but has better error handling than LinkPreviewGenerator.
-                          difficultURLs.any((str)=>containedURLs.first.startsWith(str))?
-                          LinkPreviewGenerator(
-                            link:containedURLs.first,
-                            backgroundColor: color,
-                            titleStyle: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-                            bodyStyle: TextStyle(color: textColor),
-                          ):
-                          AnyLinkPreview(
-                            link:containedURLs.first,
-                            backgroundColor: color,
-                            titleStyle: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-                            bodyStyle: TextStyle(color: textColor),
-                          )
-                        )
-                    )
-                  ),
-                ]:[]
+                  ),    
+                ),            
               ),
-            ),
+            ],
           ),
-        ],
-       ),
-      ),
+        ),
+      ],
     );
     Widget container;
     if (event.hasAggregatedEvents(timeline, RelationshipTypes.reaction) ||
