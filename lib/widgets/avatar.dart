@@ -78,13 +78,18 @@ class Avatar extends StatelessWidget {
           ),
         ),
         PresenceBuilder(
+          client: client,
           userId: presenceUserId,
           builder: (context, presence) {
-            if (presence == null) return const SizedBox.shrink();
+            if (presence == null ||
+                (presence.presence == PresenceType.offline &&
+                    presence.lastActiveTimestamp == null)) {
+              return const SizedBox.shrink();
+            }
             final dotColor = presence.presence.isOnline
                 ? Colors.green
                 : presence.presence.isUnavailable
-                    ? Colors.red
+                    ? Colors.orange
                     : Colors.grey;
             return Positioned(
               bottom: -4,

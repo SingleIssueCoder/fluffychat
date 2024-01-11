@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:fluffychat/config/themes.dart';
-import 'package:fluffychat/pages/add_story/add_story.dart';
 import 'package:fluffychat/pages/archive/archive.dart';
 import 'package:fluffychat/pages/chat/chat.dart';
 import 'package:fluffychat/pages/chat_details/chat_details.dart';
@@ -27,11 +26,9 @@ import 'package:fluffychat/pages/settings_emotes/settings_emotes.dart';
 import 'package:fluffychat/pages/settings_ignore_list/settings_ignore_list.dart';
 import 'package:fluffychat/pages/settings_multiple_emotes/settings_multiple_emotes.dart';
 import 'package:fluffychat/pages/settings_notifications/settings_notifications.dart';
+import 'package:fluffychat/pages/settings_password/settings_password.dart';
 import 'package:fluffychat/pages/settings_security/settings_security.dart';
-import 'package:fluffychat/pages/settings_stories/settings_stories.dart';
 import 'package:fluffychat/pages/settings_style/settings_style.dart';
-import 'package:fluffychat/pages/story/story_page.dart';
-import 'package:fluffychat/pages/tasks/tasks.dart';
 import 'package:fluffychat/widgets/layouts/empty_page.dart';
 import 'package:fluffychat/widgets/layouts/two_column_layout.dart';
 import 'package:fluffychat/widgets/log_view.dart';
@@ -113,32 +110,6 @@ abstract class AppRoutes {
                   ),
           ),
           routes: [
-            GoRoute(
-              path: 'stories/create',
-              pageBuilder: (context, state) => defaultPageBuilder(
-                context,
-                const AddStoryPage(),
-              ),
-              redirect: loggedOutRedirect,
-            ),
-            GoRoute(
-              path: 'stories/:roomid',
-              pageBuilder: (context, state) => defaultPageBuilder(
-                context,
-                const StoryPage(),
-              ),
-              redirect: loggedOutRedirect,
-              routes: [
-                GoRoute(
-                  path: 'share',
-                  pageBuilder: (context, state) => defaultPageBuilder(
-                    context,
-                    const AddStoryPage(),
-                  ),
-                  redirect: loggedOutRedirect,
-                ),
-              ],
-            ),
             GoRoute(
               path: 'archive',
               pageBuilder: (context, state) => defaultPageBuilder(
@@ -272,19 +243,25 @@ abstract class AppRoutes {
                       ),
                       routes: [
                         GoRoute(
-                          path: 'stories',
-                          pageBuilder: (context, state) => defaultPageBuilder(
-                            context,
-                            const SettingsStories(),
-                          ),
+                          path: 'password',
+                          pageBuilder: (context, state) {
+                            return defaultPageBuilder(
+                              context,
+                              const SettingsPassword(),
+                            );
+                          },
                           redirect: loggedOutRedirect,
                         ),
                         GoRoute(
                           path: 'ignorelist',
-                          pageBuilder: (context, state) => defaultPageBuilder(
-                            context,
-                            const SettingsIgnoreList(),
-                          ),
+                          pageBuilder: (context, state) {
+                            return defaultPageBuilder(
+                              context,
+                              SettingsIgnoreList(
+                                initialUserId: state.extra?.toString(),
+                              ),
+                            );
+                          },
                           redirect: loggedOutRedirect,
                         ),
                         GoRoute(
@@ -306,7 +283,10 @@ abstract class AppRoutes {
               path: ':roomid',
               pageBuilder: (context, state) => defaultPageBuilder(
                 context,
-                ChatPage(roomId: state.pathParameters['roomid']!),
+                ChatPage(
+                  roomId: state.pathParameters['roomid']!,
+                  shareText: state.uri.queryParameters['body'],
+                ),
               ),
               redirect: loggedOutRedirect,
               routes: [
@@ -391,17 +371,6 @@ abstract class AppRoutes {
                     ),
                   ],
                   redirect: loggedOutRedirect,
-                ),
-                GoRoute(
-                  path: 'tasks',
-                  pageBuilder: (context, state) => defaultPageBuilder(
-                    context,
-                    TasksPage(
-                      room: Matrix.of(context)
-                          .client
-                          .getRoomById(state.pathParameters['roomid']!)!,
-                    ),
-                  ),
                 ),
               ],
             ),

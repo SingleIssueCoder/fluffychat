@@ -25,6 +25,8 @@ abstract class AppConfig {
       'https://github.com/krille-chan/fluffychat/wiki/Push-Notifications-without-Google-Services';
   static const String encryptionTutorial =
       'https://github.com/krille-chan/fluffychat/wiki/How-to-use-end-to-end-encryption-in-FluffyChat';
+  static const String startChatTutorial =
+      'https://github.com/krille-chan/fluffychat/wiki/How-to-Find-Users-in-FluffyChat';
   static const String appId = 'im.fluffychat.FluffyChat';
   static const String appOpenUrlScheme = 'im.fluffychat';
   static String _webBaseUrl = 'https://fluffychat.im/web';
@@ -46,7 +48,7 @@ abstract class AppConfig {
   static bool autoplayImages = true;
   static bool playMessageNotificationSound = true;
   static bool sendTypingNotifications = true;
-  static bool sendOnEnter = false;
+  static bool? sendOnEnter;
   static bool experimentalVoip = false;
   static const bool hideTypingUsernames = false;
   static const bool hideAllStateEvents = false;
@@ -66,6 +68,11 @@ abstract class AppConfig {
       'https://github.com/googlefonts/noto-emoji/';
   static const double borderRadius = 16.0;
   static const double columnWidth = 360.0;
+  static final Uri homeserverList = Uri(
+    scheme: 'https',
+    host: 'servers.joinmatrix.org',
+    path: 'servers.json',
+  );
 
   static void loadFromJson(Map<String, dynamic> json) {
     if (json['chat_color'] != null) {

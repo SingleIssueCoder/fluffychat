@@ -2,14 +2,14 @@ name: fluffychat
 description: Chat with your friends.
 publish_to: none
 # On version bump also increase the build number for F-Droid
-version: 1.15.1+3522
+version: 1.17.0+3524
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   any_link_preview: any
-  adaptive_dialog: ^1.10.0
+  adaptive_dialog: ^2.0.0
   animations: ^2.0.8
   archive: ^3.4.9
   async: ^2.11.0
@@ -20,7 +20,6 @@ dependencies:
   collection: ^1.17.2
   cupertino_icons: any
   desktop_drop: ^0.4.4
-  desktop_lifecycle: ^0.1.0
   desktop_notifications: ^0.6.3
   device_info_plus: ^9.1.0
   dynamic_color: ^1.6.8
@@ -32,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_app_badger: ^1.5.0
-  flutter_blurhash: ^0.7.0
+  flutter_blurhash: ^0.8.2
   flutter_cache_manager: ^3.3.0
   flutter_foreground_task: ^6.0.0+1
   flutter_highlighter: ^0.1.1
@@ -43,20 +42,21 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_map: ^4.0.0
-  flutter_math_fork: ^0.7.1
-  flutter_olm: ^1.2.0
-  flutter_openssl_crypto: ^0.1.0
-  flutter_ringtone_player: ^3.1.1
+  flutter_math_fork: ^0.7.2
+  flutter_olm: 1.3.2 # Keep in sync with scripts/prepare-web.sh ! 1.4.0 does currently not build on Android
+  flutter_openssl_crypto: ^0.3.0
+  flutter_ringtone_player: ^4.0.0+2
   flutter_secure_storage: ^9.0.0
   flutter_typeahead: ^4.8.0
-  flutter_web_auth_2: ^3.0.3
+  flutter_web_auth_2: ^3.0.4
   flutter_webrtc: ^0.9.46
   future_loading_dialog: ^0.3.0
   geolocator: ^7.6.2
   go_router: ^12.1.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  http: ^0.13.4
+  html: ^0.15.4
+  http: ^0.13.6
   image_picker: ^1.0.0
   intl: any
   just_audio: ^0.9.30
@@ -64,8 +64,7 @@ dependencies:
   latlong2: ^0.8.1
   link_preview_generator: any
   linkify: ^5.0.0
-  matrix: ^0.22.6
-  matrix_homeserver_recommendations: ^0.3.0
+  matrix: ^0.25.4
   native_imaging: ^0.1.0
   package_info_plus: ^4.0.0
   pasteboard: ^0.2.0
@@ -81,6 +80,9 @@ dependencies:
   share_plus: ^7.2.1
   shared_preferences: ^2.2.0 # Pinned because https://github.com/flutter/flutter/issues/118401
   slugify: ^2.0.0
+  sqflite: ^2.3.0
+  sqflite_common_ffi: ^2.3.0+4
+  sqflite_sqlcipher: ^2.2.1
   swipe_to_action: ^0.2.0
   tor_detector_web: ^1.1.0
   uni_links: ^0.5.1

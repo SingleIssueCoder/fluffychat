@@ -52,8 +52,10 @@ class ImageBubble extends StatelessWidget {
     var height = 32;
     if (ratio > 1.0) {
       height = (width / ratio).round();
+      if (height <= 0) height = 1;
     } else {
       width = (height * ratio).round();
+      if (width <= 0) width = 1;
     }
     return SizedBox(
       width: this.width,
@@ -87,7 +89,11 @@ class ImageBubble extends StatelessWidget {
     return Material(
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius,
-        side: BorderSide(color: Theme.of(context).dividerColor),
+        side: BorderSide(
+          color: event.messageType == MessageTypes.Sticker
+              ? Colors.transparent
+              : Theme.of(context).dividerColor,
+        ),
       ),
       child: InkWell(
         onTap: () => _onTap(context),
